@@ -5,9 +5,9 @@
 
 
 // Task
-#define NAV_TIME        100 // Hz
+#define NAV_TIME        20 // Hz
 #define NAV_PERIOD      (NAV_TIME/portTICK_PERIOD_MS)
-
+#define NAV_TIMEOUT     NAV_PERIOD
 
 
 // TIM

@@ -2,31 +2,37 @@
 #define LIBRARIES_TB6612FNG_MOTOR_H_
 
 
-#define TB66_PWM_FREQ  1000 // Hz  (100KHz Max)
+#define TB66_PWM_FREQ       100 // Hz  (100KHz Max)
 
-#define D4_AIN1_Pin GPIO_PIN_5
-#define D4_AIN1_GPIO_Port GPIOB
-#define D5_AIN2_Pin GPIO_PIN_4
-#define D5_AIN2_GPIO_Port GPIOB
-#define D4_AIN1 D4_AIN1_GPIO_Port,D4_AIN1_Pin
-#define D5_AIN2 D5_AIN2_GPIO_Port,D5_AIN2_Pin
+#define D4_AIN1_Pin         GPIO_PIN_5
+#define D4_AIN1_GPIO_Port   GPIOB
+#define D5_AIN2_Pin         GPIO_PIN_4
+#define D5_AIN2_GPIO_Port   GPIOB
+#define D4_AIN1             D4_AIN1_GPIO_Port,D4_AIN1_Pin
+#define D5_AIN2             D5_AIN2_GPIO_Port,D5_AIN2_Pin
 
-#define D3_PWMA_Pin GPIO_PIN_3
-#define D3_PWMA_GPIO_Port GPIOB
+#define D7_BIN1_Pin         GPIO_PIN_8
+#define D7_BIN1_GPIO_Port   GPIOA
+#define D8_BIN2_Pin         GPIO_PIN_9
+#define D8_BIN2_GPIO_Port   GPIOA
+#define D7_BIN1             D7_BIN1_GPIO_Port,D7_BIN1_Pin
+#define D8_BIN2             D8_BIN2_GPIO_Port,D8_BIN2_Pin
 
-#define D7_BIN1_Pin GPIO_PIN_8
-#define D7_BIN1_GPIO_Port GPIOA
-#define D8_BIN2_Pin GPIO_PIN_9
-#define D8_BIN2_GPIO_Port GPIOA
-#define D7_BIN1 D7_BIN1_GPIO_Port,D7_BIN1_Pin
-#define D8_BIN2 D8_BIN2_GPIO_Port,D8_BIN2_Pin
 
-#define D6_PWMB_Pin GPIO_PIN_10
-#define D6_PWMB_GPIO_Port GPIOB
+//#define D3_PWMA_Pin         GPIO_PIN_3
+//#define D3_PWMA_GPIO_Port   GPIOB
+#define D3_PWMA_Pin         GPIO_PIN_2
+#define D3_PWMA_GPIO_Port   GPIOB
+#define D3_PWMA_AF          GPIO_AF1_TIM2
+#define D6_PWMB_Pin         GPIO_PIN_10
+#define D6_PWMB_GPIO_Port   GPIOB
+#define D6_PWMB_AF          GPIO_AF1_TIM2
 
-#define PWM_port GPIOB
 
 #define TB66_TIM_INST       TIM2
+#define TB66_TIM_PWMA_CH    TIM_CHANNEL_4
+#define TB66_TIM_PWMB_CH    TIM_CHANNEL_3
+
 
 
 

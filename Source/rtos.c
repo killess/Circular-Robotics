@@ -26,23 +26,24 @@
 #include "rtos.h"
 #include "task_led.h"
 #include "task_navigation.h"
-
-//#include "task_communication.h"
+#include "task_communication.h"
 //#include "task_sensors.h"
-//#include "task_debug.h"
+#include "task_debug.h"
 
-
+#include "wireless_joystick/wireless_joystick.h"
 
 
 
 // Task Handles
 osThreadId LedHandle;
 osThreadId NavHandle;
+osThreadId CommsHandle;
 //osThreadId SensorsHandle;
-//osThreadId CommsHandle;
+osThreadId DebugHandle;
 
 
 // Queue Handles
+osMessageQId queueJoystickHandle;
 //osMessageQId queueCompassDataHandle;
 //osMessageQId queueCompassCmdHandle;
 //osMessageQId queueCommandHandle;
@@ -61,7 +62,7 @@ osThreadId NavHandle;
 //   Add " --undefined=uxTopUsedPriority " in LINKER flags in project options
 //   Add " $_TARGETNAME configure -rtos auto " in openOCD.cfg file
 //   Copy " cmsis_os.c and cmsis_os.h "  from the cube/FreeRTOS to Libraries/CMSIS/RTOS
-const int USED uxTopUsedPriority = configMAX_PRIORITIES - 1;
+//const int USED uxTopUsedPriority = configMAX_PRIORITIES - 1;
 
 
 
@@ -85,36 +86,24 @@ void rtos_start(void)
 	osThreadDef(Nav, task_nav, osPriorityHigh, 0, 128);
 	NavHandle = osThreadCreate(osThread(Nav), NULL);
 
-//	osThreadDef(Compass, task_compass, osPriorityNormal, 0, 128);
-//	CompassHandle = osThreadCreate(osThread(Compass), NULL);
+	osThreadDef(Comms, task_Comms, osPriorityNormal, 0, 256);
+	CommsHandle = osThreadCreate(osThread(Comms), NULL);
 
-
-
-//	osThreadDef(Comms, task_Comms, osPriorityNormal, 0, 256);
-//	CommsHandle = osThreadCreate(osThread(Comms), NULL);
-
-	//osThreadDef(Storage, task_storage, osPriorityNormal, 0, 256);
-	//StoreHandle = osThreadCreate(osThread(Storage), NULL);
-
-//	osThreadDef(Sensors, task_sensors, osPriorityNormal, 0, 128);
-//	SensorHandle = osThreadCreate(osThread(Sensors), NULL);
-
-	//osThreadDef(Mission, task_mission, osPriorityNormal, 0, 128);
-	//MissionHandle = osThreadCreate(osThread(Mission), NULL);
+	osThreadDef(Debug, task_debug, osPriorityBelowNormal, 0, 256);
+	DebugHandle = osThreadCreate(osThread(Debug), NULL);
 
 	//osThreadDef(Watchdog, task_watchdog, osPriorityLow, 0, 128);
 	//WatchdogHandle = osThreadCreate(osThread(Watchdog), NULL);
 
-	//osThreadDef(Debug, task_debug, osPriorityBelowNormal, 0, 256);
-	//DebugHandle = osThreadCreate(osThread(Debug), NULL);
+
 
 
 
 
 	// Create Queues
-//	osMessageQDef(queueCompassData, 3, compassData_t);
-//	queueCompassDataHandle = osMessageCreate(osMessageQ(queueCompassData), NULL);
-//	vQueueAddToRegistry(queueCompassDataHandle, "CompassRx");
+	osMessageQDef(queueJoystickData, 3, wjoy_t);
+	queueJoystickHandle = osMessageCreate(osMessageQ(queueJoystickData), NULL);
+	vQueueAddToRegistry(queueJoystickHandle, "Joystick");
 //
 //	osMessageQDef(queueCompassCmd, 3, osvr_cmd_t);
 //	queueCompassCmdHandle = osMessageCreate(osMessageQ(queueCompassCmd), NULL);

@@ -77,12 +77,20 @@ void tb66_gpio_init(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = D6_PWMB_Pin|D3_PWMA_Pin;
+	GPIO_InitStruct.Pin = D3_PWMA_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-	GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
-	HAL_GPIO_Init(PWM_port, &GPIO_InitStruct);
+	GPIO_InitStruct.Alternate = D3_PWMA_AF;
+	HAL_GPIO_Init(D3_PWMA_GPIO_Port, &GPIO_InitStruct);
+
+	GPIO_InitStruct.Pin = D6_PWMB_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+	GPIO_InitStruct.Alternate = D6_PWMB_AF;
+	HAL_GPIO_Init(D6_PWMB_GPIO_Port, &GPIO_InitStruct);
+
 }
 
 
@@ -144,18 +152,19 @@ void tb66_tim_init(void)
 	sConfigOC.Pulse = 0;
 	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	if (HAL_TIM_PWM_ConfigChannel(&htim, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+	if (HAL_TIM_PWM_ConfigChannel(&htim, &sConfigOC, TB66_TIM_PWMA_CH) != HAL_OK)
 	{
 		Error_Handler(__FILE__, __LINE__);
 	}
-	if (HAL_TIM_PWM_ConfigChannel(&htim, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+	if (HAL_TIM_PWM_ConfigChannel(&htim, &sConfigOC, TB66_TIM_PWMB_CH) != HAL_OK)
 	{
 		Error_Handler(__FILE__, __LINE__);
 	}
 
-	HAL_TIM_PWM_Start(&htim, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(&htim, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim, TB66_TIM_PWMA_CH);
+	HAL_TIM_PWM_Start(&htim, TB66_TIM_PWMB_CH);
 }
+
 
 //------------------------------------------------------------------------------
 // Task Name      : Error_Handler
@@ -211,7 +220,7 @@ void tb66_control(tb66_cmd_t cmda, tb66_cmd_t cmdb)
 		break;
 	}
 
-	switch(cmda)
+	switch(cmdb)
 	{
 	case TB66_SHORT_BRAKE:
 		HAL_GPIO_WritePin(D7_BIN1, GPIO_PIN_SET);
@@ -259,7 +268,7 @@ void tb66_speed(uint8_t speeda, uint8_t speedb)
 		speedb=100;
 
 	count = speeda * clk.scalar;
-	htim.Instance->CCR2 = (uint16_t)count;
+	htim.Instance->CCR4 = (uint16_t)count;
 	count = speedb * clk.scalar;
 	htim.Instance->CCR3 = (uint16_t)count;
 }

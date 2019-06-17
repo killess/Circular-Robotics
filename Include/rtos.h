@@ -9,17 +9,19 @@
 // Task Handles
 extern osThreadId LedHandle;
 extern osThreadId NavHandle;
+extern osThreadId CommsHandle;
+extern osThreadId DebugHandle;
 
 //extern osThreadId CompassHandle;
-//extern osThreadId CommsHandle;
 //extern osThreadId StoreHandle;
 //extern osThreadId SensorHandle;
 //extern osThreadId MissionHandle;
 //extern osThreadId WatchdogHandle;
-//extern osThreadId DebugHandle;
+
 
 
 // Queue Handles
+extern osMessageQId queueJoystickHandle;
 //extern osMessageQId queueCompassDataHandle;
 //extern osMessageQId queueCompassCmdHandle;
 //extern osMessageQId queueCommandHandle;
@@ -28,14 +30,14 @@ extern osThreadId NavHandle;
 //extern osMessageQId queueStreamHandle;
 
 
-
+/*
 // Debugging for openOCD
 #ifdef __GNUC__
 #define USED __attribute__((used))
 #else
 #define USED
 #endif
-
+*/
 
 
 

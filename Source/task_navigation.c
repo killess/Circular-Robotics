@@ -29,11 +29,12 @@
 //#include "task_debug.h"
 //#include "task_communication.h"
 #include "Motor-TB6612FNG/TB6612FNG.h"
+#include "wireless_joystick/wireless_joystick.h"
 
 //------------------------------------------------------------------------------
 // Private Variables
 //------------------------------------------------------------------------------
-
+__IO wjoy_t wjdata;
 
 //static void init_task_peripherals(void);
 
@@ -47,27 +48,32 @@
 //------------------------------------------------------------------------------
 void task_nav(void const * argument)
 {
-	TickType_t xLastWakeTime;
+	//TickType_t xLastWakeTime;
 
-	uint8_t test1=0,test2=0;
+	//uint8_t test1=0,test2=0;
 	tb66_init(); // Motor Driver IC
 
-	tb66_control(TB66_CW,TB66_CW);
 
+	//tb66_control(TB66_STOP,TB66_STOP);
 
-	xLastWakeTime = osKernelSysTick();
+	//tb66_control(TB66_CW,TB66_CW);
+
+	//tb66_control(TB66_CW,TB66_STOP);
+	//tb66_speed(50,50);
+
+	//xLastWakeTime = osKernelSysTick();
 	while(1)
 	{
 
-		tb66_speed(test1,test2);
 
-		test1++;
-		if(test1>100)test1=0;
-		test2++;
-		if(test2>100)test2=0;
+//		tb66_speed(test1,test2);
+//		test1++;
+//		if(test1>100)test1=0;
+//		test2++;
+//		if(test2>100)test2=0;
 
 		// Read data queues
-//		xQueueReceive(queueCompassDataHandle,&Compass,NAV_TIMEOUT);
+		xQueueReceive(queueJoystickHandle,&wjdata,NAV_TIMEOUT);
 //		xQueueReceive(queueCommandHandle,&Command,0);
 //		xQueueReceive(queueSensorHandle,&Sensors,0);
 
@@ -107,7 +113,7 @@ void task_nav(void const * argument)
 
 
 
-		osDelayUntil(&xLastWakeTime, NAV_PERIOD);
+		//osDelayUntil(&xLastWakeTime, NAV_PERIOD);
 	}// End main loop
 }// End Task
 
